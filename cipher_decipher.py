@@ -1,6 +1,7 @@
 
 
 #--------------------------------------------------------------------------------
+# Funcion to cipher the message
 def cipherShift(message, key):
     ciphered_message = ""
     for m in range(len(message)):
@@ -17,6 +18,7 @@ def cipherShift(message, key):
     return ciphered_message
 
 #--------------------------------------------------------------------------------
+# Funcion to decipher the message
 def decipherShift(message, key):
     deciphered_message = ""
     for m in range(len(message)):
