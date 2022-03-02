@@ -10,7 +10,7 @@ def cipherShift(message, key):
             k -= len(key)
 
         ciphered_message += chr(ord(message[m]) + ord(key[k]) - ord('A'))
-        if ord(ciphered_message[m]) > ord('Z'):
+        if ord(message[m]) > ord('Z'):
             ciphered_message = ciphered_message[:-1]
             ciphered_message += chr(ord(ciphered_message[m]) - (ord('Z') - ord('A') + 1))
     
