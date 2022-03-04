@@ -3,6 +3,8 @@ import break_cipher
 import cipher_decipher
 import text_processing
 
+import numpy as np
+
 #--------------------------------------------------------------------------------
 def menu():
     message = input("Enter your message: ")
@@ -31,8 +33,6 @@ print("DECIPHERED MESSAGE: ", decrypted_message_w_chr)
 """
 
 
-
-
 print("\n-------------------- CIPHER --------------------\n")
 cipher_message = cipher_decipher.cipherShift(new_message, key)
 print("CIPHERED MESSAGE: ", text_processing.returnSpecialChr(removed_chr_dict, cipher_message))
@@ -40,25 +40,30 @@ print("CIPHERED MESSAGE: ", text_processing.returnSpecialChr(removed_chr_dict, c
 print("\n----------------- DECRYPTOR -------------------\n")
 decrypted_message = cipher_decipher.decipherShift(cipher_message, key)
 print("DECIPHERED MESSAGE: ", decrypted_message)
-
 equals = break_cipher.compareStrings(cipher_message)
 
-print("\n---------------- EQUAL LETTERS -----------------\n")
 
+print("\n---------------- EQUAL LETTERS -----------------\n")
 print(equals)
 
-print("\n---------------- EQUAL LETTERS -----------------\n")
-num_key = input("Number of letters in the KEYWORD: ")
+equals_without_the_first_one = equals[1:] # rs
+break_cipher.getPeeks(np.array(equals))
 
 
-print("\n---------------- LETTER DICT -----------------\n")
-letter_dict = break_cipher.countLetters(cipher_message)
-print(letter_dict)
+print("Desired key len: " + str(len(key)))
+# -------------------------------------------------- Faz depois emocionada
+# print("\n---------------- EQUAL LETTERS -----------------\n")
+# num_key = input("Number of letters in the KEYWORD: ")
 
 
-# ISSO TA MOSTRANDO A FREQUENCIA DE TODAS AS LETRAS E NAO É ASSIM QUE É PRA FAZER
-# TEM Q IR DE ACORDO COM LEN(KEY)
-break_cipher.showPlot(letter_dict)
+# print("\n---------------- LETTER DICT -----------------\n")
+# letter_dict = break_cipher.countLetters(cipher_message)
+# print(letter_dict)
+
+
+# # ISSO TA MOSTRANDO A FREQUENCIA DE TODAS AS LETRAS E NAO É ASSIM QUE É PRA FAZER
+# # TEM Q IR DE ACORDO COM LEN(KEY)
+# break_cipher.showPlot(letter_dict)
 
 
 
