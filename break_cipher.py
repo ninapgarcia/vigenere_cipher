@@ -16,10 +16,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from scipy import fftpack
-from scipy.signal import find_peaks
 from scipy.signal import argrelextrema
-
-
+from scipy import stats
 
 #--------------------------------------------------------------------------------
 
@@ -60,18 +58,47 @@ def countLetters(text):
 
 #--------------------------------------------------------------------------------
 
-def showPlot(letter_dict):
-    names = list(letter_dict.keys())
-    values = list(letter_dict.values())
-
-    plt.bar(range(len(letter_dict)), values, tick_label=names)
-    plt.show()
+def guessByMode(power, freqs):
+    copy_power = power.copy()
+    frequencies = []
+    for _ in range(10):
+        max_power_index = np.argmax(copy_power)
+        frequencies.append(freqs[max_power_index])
+        copy_power[max_power_index] = 0
+    frequencies = sorted(frequencies)
+    frequencies.reverse()
+    aux_frequencies_list = frequencies[1:]
+    aux_frequencies_list.append(0)
+    guesses = np.round((np.abs(np.array(frequencies) - np.array(aux_frequencies_list)))**(-1))
+    # print("Guesses by mode: ", guesses)
+    return stats.mode(guesses).mode[0]
 
 #--------------------------------------------------------------------------------
 
-def getPeeks(equals):
+def guessByBiggestPower(power, freqs):
+    max_power_index = np.argmax(power)
+    frequency_max_power = freqs[max_power_index]
+    return round(1/frequency_max_power)
+
+#--------------------------------------------------------------------------------
+
+def guessBySTDThreshold(power, freqs):
+    local_power_maxes = argrelextrema(power, np.greater)
+    power_mean = np.mean(power)
+    power_std = np.std(power)
+    frequency_guesses = []
+    for local_max_index in local_power_maxes[0]:
+        if( power[local_max_index] > (power_mean+2*power_std)):
+            frequency_guesses.append(freqs[local_max_index])
+    size_guess = round(1/frequency_guesses[0])
+    return size_guess
+
+#--------------------------------------------------------------------------------
+
+def guessKeySize(equals):
     # Set sample frequency
     sample_freq = fftpack.fftfreq(equals.size, d=1)
+
     # Apply the fast fourier transform to signal
     sig_fft = fftpack.fft(equals)
 
@@ -82,44 +109,12 @@ def getPeeks(equals):
     # Get the power frequency espectrum
     power = np.abs(sig_fft)[pidxs]
     
-    # Find signal peeks
-    max_power = np.max(power)
-    max_power_index = np.argmax(power)
-
-    # Index max power -> It's a multiple of fundamental frequency -> Our objective
-    frequency_max_power = freqs[max_power_index]
-    print("Max power frequency: ", frequency_max_power)
-
-    # Get all power maxes
-    local_power_maxes = argrelextrema(power, np.greater)
-    print(len(local_power_maxes[0])) 
-    THRESHOLD = 0.02
-
-    power_mean = np.mean(power)
-    power_std = np.std(power)
-    print("Media das potencias: "+ str(np.mean(power)))
-    print("Variancia das potencias: "+ str(np.std(power)))
-
-    frequency_guesses = []
-    for local_max_index in local_power_maxes[0]:
-        if(freqs[max_power_index] == freqs[local_max_index]):
-            print("MAXIMO: ", freqs[local_max_index])
-        elif( power[local_max_index] > (power_mean+2*power_std)):
-            print("MULTIPLO: ", freqs[local_max_index], freqs[max_power_index]%freqs[local_max_index])
-            # Desse jeito reduz-se muuito a quantidade de candidatos, mas ainda dá até uns 20 dependendo da chave
-            frequency_guesses.append(freqs[local_max_index])
-
-    # Funciona muitas vezes, mas nem sempre, não sei bem mais o que pensar - Código tá feio mas tá facil de organizar kkk
-    # Uma coisa q pensei com essa lista é que se pá a gente pode iterar sobre ela nas outras etapas, depois explico kkk
-    print("FrequencyGuesses: ", frequency_guesses)
-    print("FrequencyGuessFavorite: ", frequency_guesses[0])
-    print("KeywordGuesses: ", np.round(1/np.array(frequency_guesses)))
-    print("Favorite keyword size guess: ", round(1/frequency_guesses[0]))
-    plt.figure()
-    plt.plot(freqs, power)
-    plt.xlabel('Frequencia [Hz]')
-    plt.ylabel('Energia')
-
-    plt.show()
+    # Apply different methods to get the guesses
+    key_size_by_mode = guessByMode(power,freqs)
+    key_size_biggest_power = guessByBiggestPower(power, freqs)
+    key_size_STD = guessBySTDThreshold(power, freqs)
+    best_guesses = [int(key_size_by_mode), key_size_biggest_power, key_size_STD]
+    
+    return power, freqs, best_guesses
 
 

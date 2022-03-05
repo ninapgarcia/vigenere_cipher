@@ -2,6 +2,7 @@
 import break_cipher 
 import cipher_decipher
 import text_processing
+import graphics
 
 import numpy as np
 
@@ -44,26 +45,27 @@ equals = break_cipher.compareStrings(cipher_message)
 
 
 print("\n---------------- EQUAL LETTERS -----------------\n")
-print(equals)
+equals_without_the_first_one = equals[1:]
+power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals))
 
-equals_without_the_first_one = equals[1:] # rs
-break_cipher.getPeeks(np.array(equals))
+print("Key len guesses: ", best_guesses)
+print("Real key len: " + str(len(key)))
 
+graphics.plotEquals(equals_without_the_first_one, freqs, power)
 
-print("Desired key len: " + str(len(key)))
-# -------------------------------------------------- Faz depois emocionada
-# print("\n---------------- EQUAL LETTERS -----------------\n")
-# num_key = input("Number of letters in the KEYWORD: ")
-
-
-# print("\n---------------- LETTER DICT -----------------\n")
-# letter_dict = break_cipher.countLetters(cipher_message)
-# print(letter_dict)
+# -------------------------------------------------------------
+print("\n---------------- EQUAL LETTERS -----------------\n")
+num_key = input("Number of letters in the KEYWORD: ")
 
 
-# # ISSO TA MOSTRANDO A FREQUENCIA DE TODAS AS LETRAS E NAO É ASSIM QUE É PRA FAZER
-# # TEM Q IR DE ACORDO COM LEN(KEY)
-# break_cipher.showPlot(letter_dict)
+print("\n---------------- LETTER DICT -----------------\n")
+letter_dict = break_cipher.countLetters(cipher_message)
+print(letter_dict)
+
+
+# ISSO TA MOSTRANDO A FREQUENCIA DE TODAS AS LETRAS E NAO É ASSIM QUE É PRA FAZER
+# TEM Q IR DE ACORDO COM LEN(KEY)
+graphics.showPlot(letter_dict)
 
 
 
