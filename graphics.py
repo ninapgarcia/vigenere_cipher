@@ -23,8 +23,9 @@ def plotEquals(equals, freqs, power):
 #--------------------------------------------------------------------------------
 
 def showPlot(letter_dict, english_letter_frequency):
-    
-    while True:
+
+    key_press = True
+    while key_press: 
 
 
         names_letters = list(letter_dict.keys())
@@ -48,7 +49,7 @@ def showPlot(letter_dict, english_letter_frequency):
 
 
         plt.draw()
-        plt.waitforbuttonpress(0)
+        key_press = plt.waitforbuttonpress(0)
         plt.close(fig)
 
         letter_dict = break_cipher.shiftDict(letter_dict)

@@ -65,6 +65,7 @@ print(letter_dict)
 
 # ISSO TA MOSTRANDO A FREQUENCIA DE TODAS AS LETRAS E NAO É ASSIM QUE É PRA FAZER
 # TEM Q IR DE ACORDO COM LEN(KEY)
+
 graphics.showPlot(letter_dict, break_cipher.ENGLISH_LETTER_FREQUENCY)
 
 
