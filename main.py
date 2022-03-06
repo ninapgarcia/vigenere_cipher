@@ -69,7 +69,7 @@ print(letter_dict)
 graphics.showPlot(letter_dict, break_cipher.ENGLISH_LETTER_FREQUENCY)
 
 
-break_cipher.shiftDisct(letter_dict)
+break_cipher.shiftDict(letter_dict)
 
 
 """

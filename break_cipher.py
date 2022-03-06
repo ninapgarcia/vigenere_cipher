@@ -88,15 +88,11 @@ def countLetters(text, key_size):
     return letter_dict
 
 #--------------------------------------------------------------------------------
-def filter_size_minus_one(number):
-    print(int(number))
-    if(int(number) == 1377):
-        return False
-    return True
     
 def guessByMode(power, freqs):
     copy_power = power.copy()
     frequencies = []
+    
     for _ in range(10):
         max_power_index = np.argmax(copy_power)
         frequencies.append(freqs[max_power_index])
@@ -106,8 +102,6 @@ def guessByMode(power, freqs):
     frequencies.reverse()
     aux_frequencies_list = frequencies[1:]
     aux_frequencies_list.append(0)
-    print(frequencies)
-    print(aux_frequencies_list)
 
     raw_guesses = (np.abs(np.array(frequencies) - np.array(aux_frequencies_list)))**(-1)
 
@@ -118,11 +112,7 @@ def guessByMode(power, freqs):
         if(not int(round(x)) == 1377):
             guesses.append(x)
 
-    print(np.round(raw_guesses))
-
-    # guesses = np.array(list(filter(filter_size_minus_one, list(raw_guesses))))
     guesses = np.round(np.array(guesses))
-    print(guesses)
 
     print("Guesses by mode: ", guesses)
     return stats.mode(guesses).mode[0]
