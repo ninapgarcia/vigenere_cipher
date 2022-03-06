@@ -1,4 +1,3 @@
-
 import break_cipher 
 import cipher_decipher
 import text_processing
@@ -46,10 +45,11 @@ equals = break_cipher.compareStrings(cipher_message)
 
 print("\n---------------- EQUAL LETTERS -----------------\n")
 equals_without_the_first_one = equals[1:]
-power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals))
+power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals_without_the_first_one))
 
 print("Key len guesses: ", best_guesses)
 print("Real key len: " + str(len(key)))
+print("Text ciphered size: ", len(decrypted_message))
 
 graphics.plotEquals(equals_without_the_first_one, freqs, power)
 
