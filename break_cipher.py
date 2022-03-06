@@ -48,6 +48,7 @@ ENGLISH_LETTER_FREQUENCY = {
 'Y' : 2.11,
 'Z' : 0.07 }
 
+
 #--------------------------------------------------------------------------------
 
 def shiftString(string, shift):
@@ -77,14 +78,16 @@ def compareStrings(ciphered_text):
 
 #--------------------------------------------------------------------------------
 
-def countLetters(text, key_size):
-    letter_list = []
+def countLetters(ciphered_text, key_size, offset):
     letter_dict = dict.fromkeys(string.ascii_uppercase, 0)
-    for i in range(len(text)):
-        if i%key_size == 0:
-            letter_list.append((letter_dict[text[i]], ))
-            letter_dict[text[i]] += 1
+
+    for i in range(len(ciphered_text)):
+        if (i-offset) % key_size == 0:
+            letter_dict[ciphered_text[i]] += 1
     
+    for key in letter_dict.keys():
+        letter_dict[key] = 100*letter_dict[key]/len(ciphered_text)
+
     return letter_dict
 
 #--------------------------------------------------------------------------------
@@ -107,14 +110,12 @@ def guessByMode(power, freqs):
 
     guesses = []
     for x in raw_guesses:
-        print(x)
-        print(int(x))
         if(not int(round(x)) == 1377):
             guesses.append(x)
 
     guesses = np.round(np.array(guesses))
 
-    print("Guesses by mode: ", guesses)
+    # print("Guesses by mode: ", guesses)
     return stats.mode(guesses).mode[0]
 
 #--------------------------------------------------------------------------------
@@ -192,7 +193,27 @@ def shiftDict(letter_dict):
     new_dict.update(letter_dict)
     new_dict[list(old_dict.keys())[0]] = old_dict[list(old_dict.keys())[0]]
 
-    print(new_dict)
-
-
     return new_dict
+
+def compareFrequencyPlots(letter_dict, english_letter_frequency):
+    diff = 0
+    for i in range(len(letter_dict)):
+        diff += abs(list(letter_dict.values())[i]-list(english_letter_frequency.values())[i])
+    return diff
+
+#----------------------------------------------------------------------------------
+def findKey(cipher_message, key_size, english_letter_frequency):
+    guessed_key = ""
+    for offset in range(key_size):
+        letter_dict = countLetters(cipher_message, key_size, offset)
+        diff = 100
+        desired_index = 0
+        for i in range(len(english_letter_frequency)):
+            new_diff = compareFrequencyPlots(letter_dict, english_letter_frequency)
+            if(new_diff < diff):
+                diff = new_diff
+                desired_index = i
+            letter_dict = shiftDict(letter_dict)
+        guessed_key += list(english_letter_frequency.keys())[desired_index]
+
+    return guessed_key
