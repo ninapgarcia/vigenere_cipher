@@ -19,6 +19,35 @@ from scipy import fftpack
 from scipy.signal import argrelextrema
 from scipy import stats
 
+
+ENGLISH_LETTER_FREQUENCY = {
+'A' : 8.12,
+'B' : 1.49,
+'C' : 2.71,
+'D' : 4.32,
+'E' : 12.0,
+'F' : 2.30,
+'G' : 2.03,
+'H' : 5.92,
+'I' : 7.31,
+'J' : 0.10,
+'K' : 0.69,
+'L' : 3.98,
+'M' : 2.61,
+'N' : 6.95,
+'O' : 7.68,
+'P' : 1.82,
+'Q' : 0.11,
+'R' : 6.02,
+'S' : 6.28,
+'T' : 9.10,
+'U' : 2.88,
+'V' : 1.11,
+'W' : 2.09,
+'X' : 0.17,
+'Y' : 2.11,
+'Z' : 0.07 }
+
 #--------------------------------------------------------------------------------
 
 def shiftString(string, shift):
@@ -48,11 +77,13 @@ def compareStrings(ciphered_text):
 
 #--------------------------------------------------------------------------------
 
-def countLetters(text):
+def countLetters(text, key_size):
+    letter_list = []
     letter_dict = dict.fromkeys(string.ascii_uppercase, 0)
-    for letter in text:
-        print(letter_dict)
-        letter_dict[letter] += 1
+    for i in range(len(text)):
+        if i%key_size == 0:
+            letter_list.append((letter_dict[text[i]], ))
+            letter_dict[text[i]] += 1
     
     return letter_dict
 
@@ -162,3 +193,16 @@ def guessKeySize(equals):
     
     return power, freqs, best_guesses
 
+#--------------------------------------------------------------------------------
+
+def shiftDict(letter_dict):
+    new_dict = {}
+    old_dict = letter_dict.copy()
+    letter_dict.pop(list(letter_dict.keys())[0])
+    new_dict.update(letter_dict)
+    new_dict[list(old_dict.keys())[0]] = old_dict[list(old_dict.keys())[0]]
+
+    print(new_dict)
+
+
+    return new_dict

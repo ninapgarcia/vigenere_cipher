@@ -59,15 +59,16 @@ num_key = len(key) # input("Number of letters in the KEYWORD: ")
 
 
 print("\n---------------- LETTER DICT -----------------\n")
-letter_dict = break_cipher.countLetters(cipher_message)
+letter_dict = break_cipher.countLetters(cipher_message, num_key)
 print(letter_dict)
 
 
 # ISSO TA MOSTRANDO A FREQUENCIA DE TODAS AS LETRAS E NAO É ASSIM QUE É PRA FAZER
 # TEM Q IR DE ACORDO COM LEN(KEY)
-graphics.showPlot(letter_dict)
+graphics.showPlot(letter_dict, break_cipher.ENGLISH_LETTER_FREQUENCY)
 
 
+break_cipher.shiftDisct(letter_dict)
 
 
 """
