@@ -48,6 +48,10 @@ ENGLISH_LETTER_FREQUENCY = {
 'Y' : 2.11,
 'Z' : 0.07 }
 
+#--------------------------------------------------------------------------------
+def get_ciphered_text():
+    ciphered_text = input("Enter your ciphered text (minimum of 1000 characteres): ")
+    return ciphered_text
 
 #--------------------------------------------------------------------------------
 

@@ -1,4 +1,10 @@
 
+#--------------------------------------------------------------------------------
+def get_message_and_key():
+    message = input("\nEnter your message: ")
+    key = input("Enter your key: ")
+
+    return message.upper(), key.upper()
 
 #--------------------------------------------------------------------------------
 # Funcion to cipher the message
@@ -37,3 +43,4 @@ def decipherShift(message, key):
     return deciphered_message
 
 #--------------------------------------------------------------------------------
+

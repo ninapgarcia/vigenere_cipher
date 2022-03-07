@@ -2,66 +2,52 @@ import break_cipher
 import cipher_decipher
 import text_processing
 import graphics
+import interface
 
 import numpy as np
 
-#--------------------------------------------------------------------------------
-def menu():
-    message = input("Enter your message: ")
-    key = input("Enter your key: ")
+while True:
+    action = int(interface.menu())
 
-    return message.upper(), key.upper()
-#--------------------------------------------------------------------------------
+    # chipher and decipher
+    if action == 1:
 
+        message, key = cipher_decipher.get_message_and_key()
 
-message, key = menu()
-removed_chr_dict, new_message = text_processing.removingSpecialChr(message)
-
-"""
-
-print("\n-------------- CIPHER --------------\n")
-cipher_message = cipher_decipher.cipherShift(new_message, key)
-cipher_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, cipher_message)
-print("CIPHERED MESSAGE: ", cipher_message_w_chr)
+        removed_chr_dict, new_message = text_processing.removingSpecialChr(message)
+        cipher_message = cipher_decipher.cipherShift(new_message, key)
+        cipher_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, cipher_message)
+        print("\n-> CIPHERED MESSAGE: ", cipher_message_w_chr, "\n")
 
 
-print("\n------------ DECRYPTOR -------------\n")
-decrypted_message = cipher_decipher.decipherShift(cipher_message, key)
-decrypted_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, decrypted_message)
-print("DECIPHERED MESSAGE: ", decrypted_message_w_chr)
+        decrypted_message = cipher_decipher.decipherShift(cipher_message, key)
+        decrypted_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, decrypted_message)
+        print("\n-> DECIPHERED MESSAGE: ", decrypted_message_w_chr, "\n")
 
-"""
+    # break cipher
+    #COLOCAR OPÇÃO DE FAZER MANUALMENTE
+    elif action == 2:
+        ciphered_text = break_cipher.get_ciphered_text()
+        removed_chr_dict, ciphered_text = text_processing.removingSpecialChr(ciphered_text)
 
+        equals = break_cipher.compareStrings(ciphered_text)
+        power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals))
+        print("Key len guesses: ", best_guesses)
 
-print("\n-------------------- CIPHER --------------------\n")
-cipher_message = cipher_decipher.cipherShift(new_message, key)
-print("CIPHERED MESSAGE: ", text_processing.returnSpecialChr(removed_chr_dict, cipher_message))
+        #SO POR ENQUANTO
+        key_size = int(input("KEY SIZE: ")) 
 
-print("\n----------------- DECRYPTOR -------------------\n")
-decrypted_message = cipher_decipher.decipherShift(cipher_message, key)
-print("DECIPHERED MESSAGE: ", decrypted_message)
-equals = break_cipher.compareStrings(cipher_message)
+        guessed_key = break_cipher.findKey(ciphered_text, key_size, break_cipher.ENGLISH_LETTER_FREQUENCY)
+        print("Text size: ", len(ciphered_text))
 
+        print("Guessed key: ", guessed_key)
 
-print("\n---------------- EQUAL LETTERS -----------------\n")
-equals_without_the_first_one = equals[1:]
-power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals_without_the_first_one))
+        decrypted_message = cipher_decipher.decipherShift(ciphered_text, guessed_key)
+        decrypted_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, decrypted_message)
+        print("\n-> DECIPHERED MESSAGE: ", decrypted_message_w_chr)
+    elif action == 0:
+        break
 
-print("Key len guesses: ", best_guesses)
-
-# graphics.plotEquals(equals_without_the_first_one, freqs, power)
-
-# -------------------------------------------------------------
-print("\n---------------- EQUAL LETTERS -----------------\n")
-key_size = len(key) # input("Number of letters in the KEYWORD: ")
-
-
-print("\n---------------- RESULT -----------------\n")
-guessed_key = break_cipher.findKey(cipher_message, key_size, break_cipher.ENGLISH_LETTER_FREQUENCY)
-print("Real key len: " + str(len(key)))
-print("Text ciphered size: ", len(decrypted_message))
-
-print("Guessed key: ", guessed_key)
 
 
 
