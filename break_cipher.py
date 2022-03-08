@@ -1,16 +1,3 @@
-
-# PASSOS PARA QUEBRAR A CIFRA DE VIGENÈRE
-
-# 1. Descobrir o tamanho da chave
-#       a. Comparar a string com ela mesma fazendo 'shifts'
-#       b. Encontrar os 'picos' de letras iguais, e assim o tamanho da palavra chave
-
-
-# 2. Descobrir letra pro letra comparando a frequência das letras
-#       a. A cada len(key) letras comparar os gráficos de frequência das letras
-
-# 3. Decifrar
-
 import string
 import matplotlib.pyplot as plt
 import numpy as np
@@ -19,7 +6,7 @@ from scipy import fftpack
 from scipy.signal import argrelextrema
 from scipy import stats
 
-
+# english letter frequency dictionary
 ENGLISH_LETTER_FREQUENCY = {
 'A' : 8.12,
 'B' : 1.49,
@@ -54,7 +41,7 @@ def get_ciphered_text():
     return ciphered_text
 
 #--------------------------------------------------------------------------------
-
+# functiont o rotate the string to the right
 def shiftString(string, shift):
     first = string[0:(len(string) - shift)] 
     second = string[(len(string) - shift):] 
@@ -63,11 +50,9 @@ def shiftString(string, shift):
     return shifted_string
 
 #--------------------------------------------------------------------------------
-
+# function to count the equal letters in 2 strings
 def compareStrings(ciphered_text):
-    
     equals = []
-
     for i in range(len(ciphered_text)):
         cont = 0
         shifted_string = shiftString(ciphered_text, i)
@@ -79,9 +64,8 @@ def compareStrings(ciphered_text):
     
     return equals
 
-
 #--------------------------------------------------------------------------------
-
+# count equal letters 
 def countLetters(ciphered_text, key_size, offset):
     letter_dict = dict.fromkeys(string.ascii_uppercase, 0)
 
@@ -89,13 +73,14 @@ def countLetters(ciphered_text, key_size, offset):
         if (i-offset) % key_size == 0:
             letter_dict[ciphered_text[i]] += 1
     
+    # transform to percentage
     for key in letter_dict.keys():
         letter_dict[key] = 100*letter_dict[key]/len(ciphered_text)
 
     return letter_dict
 
 #--------------------------------------------------------------------------------
-    
+
 def guessByMode(power, freqs):
     copy_power = power.copy()
     frequencies = []
@@ -142,6 +127,7 @@ def guessBySTDThreshold(power, freqs):
     size_guess = round(1/frequency_guesses[0])
     return size_guess
 
+#--------------------------------------------------------------------------------
 
 def guessBySTDThresholdNina(power, freqs):
     local_power_maxes = argrelextrema(power, np.greater)
@@ -199,6 +185,8 @@ def shiftDict(letter_dict):
 
     return new_dict
 
+#--------------------------------------------------------------------------------
+
 def compareFrequencyPlots(letter_dict, english_letter_frequency):
     diff = 0
     for i in range(len(letter_dict)):
@@ -221,3 +209,4 @@ def findKey(cipher_message, key_size, english_letter_frequency):
         guessed_key += list(english_letter_frequency.keys())[desired_index]
 
     return guessed_key
+#--------------------------------------------------------------------------------

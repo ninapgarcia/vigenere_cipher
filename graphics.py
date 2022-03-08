@@ -53,6 +53,7 @@ def showDistributionPlotInteractive(letter_dict, english_letter_frequency):
     
     return list(english_letter_frequency.keys())[cont]
 
+#--------------------------------------------------------------------------------
 
 def showDistributionPlot(letter_dict, english_letter_frequency):
 
@@ -78,3 +79,4 @@ def showDistributionPlot(letter_dict, english_letter_frequency):
     plt.close(fig)
 
     letter_dict = break_cipher.shiftDict(letter_dict)
+#--------------------------------------------------------------------------------

@@ -1,5 +1,7 @@
+import colors
 
-
+#--------------------------------------------------------------------------------
+# innicial menu
 def menu():
     print("\n\n--------------------------- VIGENERE CIPHER ---------------------------\n")
 
@@ -15,8 +17,10 @@ def menu():
 
     return action 
 
-
+#--------------------------------------------------------------------------------
+# break cipher menu
 def break_cipher_mannualy():
+    print(colors.CYAN, "\n-> To break the cipher your text must have at least 1000 characteres and be ciphered with a key that has 2 to 20 characteres!", colors.RESET)
     print("\nHow do you want to break the cipher?\n")
     while True:
         print("0. Authomatically")
@@ -27,7 +31,7 @@ def break_cipher_mannualy():
         else:
             break
 
-    return mannualy 
+    return int(mannualy) 
 
 
 
