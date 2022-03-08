@@ -3,6 +3,7 @@ import cipher_decipher
 import text_processing
 import graphics
 import interface
+import colors
 
 import numpy as np
 
@@ -17,16 +18,17 @@ while True:
         removed_chr_dict, new_message = text_processing.removingSpecialChr(message)
         cipher_message = cipher_decipher.cipherShift(new_message, key)
         cipher_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, cipher_message)
-        print("\n-> CIPHERED MESSAGE: ", cipher_message_w_chr, "\n")
+        print(colors.CYAN, "\n-> CIPHERED MESSAGE: ", colors.RESET, cipher_message_w_chr, "\n")
 
 
         decrypted_message = cipher_decipher.decipherShift(cipher_message, key)
         decrypted_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, decrypted_message)
-        print("\n-> DECIPHERED MESSAGE: ", decrypted_message_w_chr, "\n")
+        print(colors.CYAN, "\n-> DECIPHERED MESSAGE: ", colors.RESET, decrypted_message_w_chr, "\n")
 
     # break cipher
-    #COLOCAR OPÇÃO DE FAZER MANUALMENTE
     elif action == 2:
+        
+        mannualy = interface.break_cipher_mannualy()
         ciphered_text = break_cipher.get_ciphered_text()
         removed_chr_dict, ciphered_text = text_processing.removingSpecialChr(ciphered_text)
 
@@ -37,14 +39,23 @@ while True:
         #SO POR ENQUANTO
         key_size = int(input("KEY SIZE: ")) 
 
-        guessed_key = break_cipher.findKey(ciphered_text, key_size, break_cipher.ENGLISH_LETTER_FREQUENCY)
-        print("Text size: ", len(ciphered_text))
+        if mannualy:
+            guessed_key = ""
+            for offset in range(key_size):
+                letter_dict = break_cipher.countLetters(ciphered_text, key_size, offset)
+                guessed_key += graphics.showDistributionPlotInteractive(letter_dict, break_cipher.ENGLISH_LETTER_FREQUENCY)
 
-        print("Guessed key: ", guessed_key)
+        else:
 
+            guessed_key = break_cipher.findKey(ciphered_text, key_size, break_cipher.ENGLISH_LETTER_FREQUENCY)
+            print("Text size: ", len(ciphered_text))
+
+
+        print(colors.CYAN, "\n\n-> GUESSED KEY: ", colors.RESET, guessed_key)
         decrypted_message = cipher_decipher.decipherShift(ciphered_text, guessed_key)
         decrypted_message_w_chr = text_processing.returnSpecialChr(removed_chr_dict, decrypted_message)
-        print("\n-> DECIPHERED MESSAGE: ", decrypted_message_w_chr)
+        print(colors.CYAN, "\n-> DECIPHERED MESSAGE: ", colors.RESET, decrypted_message_w_chr)
+
     elif action == 0:
         break
 

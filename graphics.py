@@ -25,6 +25,7 @@ def plotEquals(equals, freqs, power):
 def showDistributionPlotInteractive(letter_dict, english_letter_frequency):
 
     key_press = True
+    cont = -1
     while key_press: 
         names_letters = list(letter_dict.keys())
         values_letters = list(letter_dict.values())
@@ -48,6 +49,9 @@ def showDistributionPlotInteractive(letter_dict, english_letter_frequency):
         plt.close(fig)
 
         letter_dict = break_cipher.shiftDict(letter_dict)
+        cont += 1
+    
+    return list(english_letter_frequency.keys())[cont]
 
 
 def showDistributionPlot(letter_dict, english_letter_frequency):
