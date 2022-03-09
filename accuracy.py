@@ -31,7 +31,7 @@ for _ in range(100):
     power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals))
 
     #IR MUDANDO ISSO AQUI PARA TESTAR CADA UM
-    key_size = int(best_guesses[0])
+    key_size = int(best_guesses[3])
 
     guessed_key = break_cipher.findKey(ciphered_text, key_size, break_cipher.ENGLISH_LETTER_FREQUENCY)
 
