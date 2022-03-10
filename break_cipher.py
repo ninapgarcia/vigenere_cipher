@@ -120,7 +120,7 @@ def guessBySTDThreshold(power, freqs):
     local_power_maxes = argrelextrema(power, np.greater)
     power_mean = np.mean(power)
     power_std = np.std(power)
-    frequency_guesses = []
+    frequency_guesses = [1]
     for local_max_index in local_power_maxes[0]:
         if( power[local_max_index] > (power_mean+2*power_std)):
             frequency_guesses.append(freqs[local_max_index])
