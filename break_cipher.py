@@ -1,9 +1,7 @@
 import string
-import matplotlib.pyplot as plt
 import numpy as np
 
 from scipy import fftpack
-from scipy.signal import argrelextrema
 from scipy import stats
 
 # english letter frequency dictionary
@@ -33,7 +31,38 @@ ENGLISH_LETTER_FREQUENCY = {
 'W' : 2.09,
 'X' : 0.17,
 'Y' : 2.11,
-'Z' : 0.07 }
+'Z' : 0.07 
+}
+
+# Portuguese letter frequency dictionary
+PORTUGUESE_LETTER_FREQUENCY = {
+'A' : 14.63,
+'B' : 1.04,
+'C' : 3.88,
+'D' : 4.99,
+'E' : 12.57,
+'F' : 1.02,
+'G' : 1.30,
+'H' : 1.28,
+'I' : 6.18,
+'J' : 0.4,
+'K' : 0.02,
+'L' : 2.78,
+'M' : 4.74,
+'N' : 5.05,
+'O' : 10.73,
+'P' : 2.52,
+'Q' : 1.2,
+'R' : 6.53,
+'S' : 7.81,
+'T' : 4.34,
+'U' : 4.63,
+'V' : 1.67,
+'W' : 0.01,
+'X' : 0.21,
+'Y' : 0.01,
+'Z' : 0.47 
+}
 
 #--------------------------------------------------------------------------------
 def get_ciphered_text():
@@ -104,42 +133,14 @@ def guessByMode(power, freqs):
 
     guesses = np.round(np.array(guesses))
 
-    # print("Guesses by mode: ", guesses)
     return stats.mode(guesses).mode[0]
 
-#--------------------------------------------------------------------------------
-
-def guessByBiggestPower(power, freqs):
-    max_power_index = np.argmax(power)
-    frequency_max_power = freqs[max_power_index]
-    return round(1/frequency_max_power)
 
 #--------------------------------------------------------------------------------
 
-def guessBySTDThreshold(power, freqs):
-    local_power_maxes = argrelextrema(power, np.greater)
-    power_mean = np.mean(power)
-    power_std = np.std(power)
-    frequency_guesses = [1]
-    for local_max_index in local_power_maxes[0]:
-        if( power[local_max_index] > (power_mean+2*power_std)):
-            frequency_guesses.append(freqs[local_max_index])
-    size_guess = round(1/frequency_guesses[0])
-    return size_guess
-
-#--------------------------------------------------------------------------------
-
-def guessBySTDThresholdNina(power, freqs):
-    local_power_maxes = argrelextrema(power, np.greater)
-    power_mean = np.mean(power)
-    power_std = np.std(power)
+def guessBySTDThresholNormalized(power, freqs):
     max_power = np.max(power)
-    power_threshold = 0.4 * max_power
-
-    # frequency_guesses = []
-    # for local_max_index in local_power_maxes[0]:
-    #     if( power[local_max_index] > (power_threshold)):
-    #         frequency_guesses.append(freqs[local_max_index])
+    power_threshold = 0.37 * max_power
 
     frequency_guesses = []
     for p in power:
@@ -167,10 +168,8 @@ def guessKeySize(equals):
     
     # Apply different methods to get the guesses
     key_size_by_mode = guessByMode(power,freqs)
-    key_size_biggest_power = guessByBiggestPower(power, freqs)
-    key_size_STD = guessBySTDThreshold(power, freqs)
-    key_size_nina = guessBySTDThresholdNina(power, freqs)
-    best_guesses = [int(key_size_by_mode), key_size_biggest_power, key_size_STD, key_size_nina]
+    key_size_normalized = guessBySTDThresholNormalized(power, freqs)
+    best_guesses = [int(key_size_by_mode), key_size_normalized]
     
     return power, freqs, best_guesses
 

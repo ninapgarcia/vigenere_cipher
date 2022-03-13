@@ -10,13 +10,13 @@ import numpy as np
 
 def generateRandomKey(alphabet):
     word = ""
-    word_size = random.randint(2, 20)
+    word_size = random.randint(2, 15)
     for _ in range(word_size):
         word += alphabet[random.randint(0, 25)]
 
     return word
 
-ITERATIONS = 1000
+ITERATIONS = 10000
 
 # accuracy test
 counters = [0,0,0,0,0]
@@ -43,6 +43,18 @@ for _ in range(ITERATIONS):
 
 
 
-accuracy = np.array(counters)/1
+accuracy = np.array(counters)/ITERATIONS
 # By Mode, Biggest Power, Threshold, NinaThreshold, Know size
 print("ACCURACY: ", accuracy)
+
+# Para 10000 iterações com senhas (2, 15)          - 0.4 de Threshold
+# ACCURACY:  [0.8938 0.519  0.     0.9467 1.    ]
+
+# Para 1000 iterações com senhas (2, 15)          - 0.4 de Threshold
+# ACCURACY:  [0.891 0.504 0.    0.946 1.   ]
+
+# Para 1000 iterações com senhas (2, 15)          - 0.45 de Threshold
+# ACCURACY:  [0.882 0.521 0.    0.923 1.   ]
+
+# Para 1000 iterações com senhas (2, 15)          - 0.37 de Threshold
+# ACCURACY:  [0.9  0.0     1.   0.95   0.  ]
