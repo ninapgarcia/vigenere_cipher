@@ -70,7 +70,6 @@ def get_ciphered_text():
     return ciphered_text
 
 #--------------------------------------------------------------------------------
-# functiont o rotate the string to the right
 def shiftString(string, shift):
     first = string[0:(len(string) - shift)] 
     second = string[(len(string) - shift):] 
@@ -79,23 +78,21 @@ def shiftString(string, shift):
     return shifted_string
 
 #--------------------------------------------------------------------------------
-# function to count the equal letters in 2 strings
 def compareStrings(ciphered_text):
     equals = []
+    # function to count the equal letters in 2 strings
     for i in range(len(ciphered_text)):
         cont = 0
         shifted_string = shiftString(ciphered_text, i)
         for j in range(len(ciphered_text)):
             if ciphered_text[j] == shifted_string[j]:
                 cont += 1
-        
         equals.append(cont)
     
     return equals
 
 #--------------------------------------------------------------------------------
-# count equal letters 
-def countLetters(ciphered_text, key_size, offset):
+def countLetterFrequency(ciphered_text, key_size, offset):
     letter_dict = dict.fromkeys(string.ascii_uppercase, 0)
 
     for i in range(len(ciphered_text)):
@@ -109,7 +106,6 @@ def countLetters(ciphered_text, key_size, offset):
     return letter_dict
 
 #--------------------------------------------------------------------------------
-
 def guessByMode(power, freqs):
     copy_power = power.copy()
     frequencies = []
@@ -135,12 +131,11 @@ def guessByMode(power, freqs):
 
     return stats.mode(guesses).mode[0]
 
-
 #--------------------------------------------------------------------------------
-
 def guessBySTDThresholNormalized(power, freqs):
+    THRESHOLD = 0.37
     max_power = np.max(power)
-    power_threshold = 0.37 * max_power
+    power_threshold = THRESHOLD * max_power
 
     frequency_guesses = []
     for p in power:
@@ -151,7 +146,6 @@ def guessBySTDThresholNormalized(power, freqs):
     return size_guess
 
 #--------------------------------------------------------------------------------
-
 def guessKeySize(equals):
     # Set sample frequency
     sample_freq = fftpack.fftfreq(equals.size, d=1)
@@ -174,7 +168,6 @@ def guessKeySize(equals):
     return power, freqs, best_guesses
 
 #--------------------------------------------------------------------------------
-
 def shiftDict(letter_dict):
     new_dict = {}
     old_dict = letter_dict.copy()
@@ -185,27 +178,26 @@ def shiftDict(letter_dict):
     return new_dict
 
 #--------------------------------------------------------------------------------
-
-def compareFrequencyPlots(letter_dict, english_letter_frequency):
+def compareFrequencyPlots(letter_dict, lang_dict):
     diff = 0
     for i in range(len(letter_dict)):
-        diff += abs(list(letter_dict.values())[i]-list(english_letter_frequency.values())[i])
+        diff += abs(list(letter_dict.values())[i]-list(lang_dict.values())[i])
     return diff
 
 #----------------------------------------------------------------------------------
-def findKey(cipher_message, key_size, english_letter_frequency):
+def findKey(cipher_message, key_size, lang_dict):
     guessed_key = ""
     for offset in range(key_size):
-        letter_dict = countLetters(cipher_message, key_size, offset)
+        letter_dict = countLetterFrequency(cipher_message, key_size, offset)
         diff = 100
         desired_index = 0
-        for i in range(len(english_letter_frequency)):
-            new_diff = compareFrequencyPlots(letter_dict, english_letter_frequency)
+        for i in range(len(lang_dict)):
+            new_diff = compareFrequencyPlots(letter_dict, lang_dict)
             if(new_diff < diff):
                 diff = new_diff
                 desired_index = i
             letter_dict = shiftDict(letter_dict)
-        guessed_key += list(english_letter_frequency.keys())[desired_index]
+        guessed_key += list(lang_dict.keys())[desired_index]
 
     return guessed_key
 #--------------------------------------------------------------------------------
