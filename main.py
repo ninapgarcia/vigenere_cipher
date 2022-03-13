@@ -53,7 +53,7 @@ while True:
             print("   >> Click the screen to make the letter guess")
 
             for offset in range(key_size):
-                letter_dict = break_cipher.countLetters(ciphered_text, key_size, offset)
+                letter_dict = break_cipher.countLetterFrequency(ciphered_text, key_size, offset)
 
                 guessed_key += graphics.showDistributionPlotInteractive(letter_dict, lang_dict)
 
