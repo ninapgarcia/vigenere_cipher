@@ -37,28 +37,30 @@ while True:
         ciphered_text = break_cipher.get_ciphered_text()
         removed_chr_dict, ciphered_text = text_processing.removingSpecialChr(ciphered_text)
 
+        
         equals = break_cipher.compareStrings(ciphered_text)
-
-        power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals)) 
-
-        print(colors.RED, best_guesses, colors.RESET)
-        # using guessedByThresholdNormalized()
-        key_size = int(best_guesses[1]) 
 
         # break the cipher mannualy
         if mannualy == 1:
             guessed_key = ""
+            power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals)) 
+            graphics.showFrequencyPlot(power, freqs)
+            key_size = int(input("Your Key size guess: "))
             print(colors.CYAN, "\nOpening distribution plots", colors.RESET)
             print("   >> Press ENTER to shift the plot")
             print("   >> Click the screen to make the letter guess")
 
+
             for offset in range(key_size):
                 letter_dict = break_cipher.countLetterFrequency(ciphered_text, key_size, offset)
-
                 guessed_key += graphics.showDistributionPlotInteractive(letter_dict, lang_dict)
 
         # break the cipher autommaticaly
         elif mannualy == 0:
+            power, freqs, best_guesses = break_cipher.guessKeySize(np.array(equals)) 
+            print(colors.RED, best_guesses, colors.RESET)
+            # using guessedByThresholdNormalized()
+            key_size = int(best_guesses[1]) 
             guessed_key = break_cipher.findKey(ciphered_text, key_size, lang_dict)
             print("Text size: ", len(ciphered_text))
 

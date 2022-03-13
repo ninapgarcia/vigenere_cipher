@@ -9,12 +9,15 @@ def menu():
         print("1. Cipher and decipher message")
         print("2. Break cipher")
         print("0. Exit")
-        action = input("Choose your action: ")[0]
-        if action.isalpha() or 0 < int(action) > 2:
-            print("\nInvalid input!")
+        action = input("Choose your action: ")
+        if(len(action)>0):
+            action = action[0]
+            if action!="1" and action!="0" and action != "2":
+                print("\nInvalid input!")
+            else:
+                break
         else:
-            break
-
+            print("\nInvalid input!")
     return action 
 
 #--------------------------------------------------------------------------------
@@ -24,7 +27,7 @@ def chooseLanguageDict():
         print("1. English")
         print("2. Portuguese")
         lang = input(">")[0]
-        if lang.isalpha() or 1 < int(lang) > 2:
+        if lang.isalpha() or 1 < int(lang) > 2 or lang == "":
             print("\nInvalid input!")
         else:
             break
