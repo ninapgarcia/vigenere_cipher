@@ -17,7 +17,7 @@ def generateRandomKey(alphabet):
     return word
 
 
-ITERATIONS = 100
+ITERATIONS = 10000
 
 # accuracy test
 counters = [0,0, 0]
@@ -49,7 +49,6 @@ accuracy = np.array(counters)/ITERATIONS
 print("ACCURACY: ", accuracy)
 
 
-
 # Para 10000 iterações com senhas (2, 15)          - 0.4 de Threshold
 # ACCURACY:  [0.8938    0.9467]
 
@@ -60,3 +59,6 @@ print("ACCURACY: ", accuracy)
 
 # Para 10000 iterações com senhas (2, 15)          - 0.37 de Threshold
 # ACCURACY:  [0.8927    0.9568]
+
+# Para 10000 iterações com senhas (2, 15)          - 0.35 de Threshold
+# ACCURACY:  [0.8898 0.9619 1.     0.     0.    ]

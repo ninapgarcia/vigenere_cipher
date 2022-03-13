@@ -133,7 +133,7 @@ def guessByMode(power, freqs):
 
 #--------------------------------------------------------------------------------
 def guessBySTDThresholNormalized(power, freqs):
-    THRESHOLD = 0.37
+    THRESHOLD = 0.45
     max_power = np.max(power)
     power_threshold = THRESHOLD * max_power
 
